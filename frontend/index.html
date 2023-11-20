@@ -1,0 +1,171 @@
+<!-- index.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heat Exchanger Calculator</title>
+</head>
+<body>
+
+    <h1>Heat Exchanger Calculator</h1>
+
+    <form id="heatExchangerForm">
+        <label for="T_H_IN">T_H_IN:</label>
+        <input type="number" id="T_H_IN" step="0.1" required><br>
+
+        <label for="T_C_IN">T_C_IN:</label>
+        <input type="number" id="T_C_IN" step="0.1" required><br>
+
+        <label for="m_dot_H">m_dot_H:</label>
+        <input type="number" id="m_dot_H" step="0.1" required><br>
+
+        <label for="m_dot_C">m_dot_C:</label>
+        <input type="number" id="m_dot_C" step="0.1" required><br>
+
+        <label for="UA">UA:</label>
+        <input type="number" id="UA" step="0.1" required><br>
+
+        <button type="button" onclick="calculate()">Calculate</button>
+    </form>
+
+    <h2>Results:</h2>
+    <p id="results"></p>
+
+    
+
+</body>
+</html> -->
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heat Exchanger Calculator</title>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 20px;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #3498db;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        #results {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Heat Exchanger Calculator</h1>
+
+    <form id="heatExchangerForm">
+        <label for="T_H_IN">T_H_IN:</label>
+        <input type="number" id="T_H_IN" step="0.1" required><br>
+
+        <label for="T_C_IN">T_C_IN:</label>
+        <input type="number" id="T_C_IN" step="0.1" required><br>
+
+        <label for="m_dot_H">m_dot_H:</label>
+        <input type="number" id="m_dot_H" step="0.1" required><br>
+
+        <label for="m_dot_C">m_dot_C:</label>
+        <input type="number" id="m_dot_C" step="0.1" required><br>
+
+        <label for="UA">UA:</label>
+        <input type="number" id="UA" step="0.1" required><br>
+
+        <button type="button" onclick="calculate()">Calculate</button>
+    </form>
+
+    <h2>Results:</h2>
+    <p id="results"></p>
+
+    <script>
+        function calculate() {
+            const T_H_IN = parseFloat(document.getElementById('T_H_IN').value);
+            const T_C_IN = parseFloat(document.getElementById('T_C_IN').value);
+            const m_dot_H = parseFloat(document.getElementById('m_dot_H').value);
+            const m_dot_C = parseFloat(document.getElementById('m_dot_C').value);
+            const UA = parseFloat(document.getElementById('UA').value);
+
+            const formData = {
+                T_H_IN: T_H_IN,
+                T_C_IN: T_C_IN,
+                m_dot_H: m_dot_H,
+                m_dot_C: m_dot_C,
+                UA: UA
+            };
+
+            fetch('http://127.0.0.1:8002/calculate_unknowns', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('results').innerText = `T_H_OUT: ${data.T_H_OUT.toFixed(2)}, T_C_OUT: ${data.T_C_OUT.toFixed(2)}`;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+
+</body>
+</html>
